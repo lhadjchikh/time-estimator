@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Task Time Estimator</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Task Time Estimator">
+  <meta name="author" content="Leila Hadj-Chikh">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Task Time Estimator</h1>
+    <h2>Task Estimation Tool for Software Planning</h2>
+    <p>Leila Hadj-Chikh<br/>Software Developer</p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Time Estimation in Software Development</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>In software project planning, developers are often asked to estimate the time
+it will take to develop individual software features. However, their time
+estimates are often inaccurate, resulting in missed deadlines and delayed releases.</p>
+
+<p>To account for the uncertainty inherent in time estimates, many software
+product managers use &quot;three-point&quot; estimates to construct time ranges for tasks.</p>
+
+<p>These estimates are based on:</p>
+
+<ol>
+<li>Most Probable Time (\( t_m \)): the most likely time estimate</li>
+<li>Optimistic Time (\( t_o \)): a best-case scenario time estimate</li>
+<li>Pessimistic Time (\( t_p \)): a worst-case scenario time estimate</li>
+</ol>
+
+<p>These estimates are then used to estimate the Expected Time (\( t_e \))
+for a task and construct confidence intervals around that time.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>Estimating Time Ranges</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Using the three estimates, a weighted average is used to calculate the Expected Time:</p>
+
+<p>\[
+t_e = \frac{t_o + 4t_m + t_p}{6}
+\]</p>
+
+<p>To construct a confidence interval for Expected Time, the standard deviation
+is estimated as:</p>
+
+<p>\[
+\sigma = \frac{t_p - t_o}{6}
+\]</p>
+
+<p>Assuming a normal distribution, a 68.3% confidence interval is estimated as:</p>
+
+<p>\[
+[t_e - \sigma,\ t_e + \sigma]
+\]</p>
+
+<p>A 95.5% confidence interval is estimated as:</p>
+
+<p>\[
+[t_e - 2\sigma,\ t_e + 2\sigma]
+\]
+Reference:<br>
+<a href="http://www.agile-code.com/blog/easy-task-estimation-with-three-point-estimation-technique/">http://www.agile-code.com/blog/easy-task-estimation-with-three-point-estimation-technique/</a></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>R Example</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">time_o &lt;- 5   # optimistic time
+time_m &lt;- 10  # most probable time
+time_p &lt;- 20  # pessimistic time
+
+# expected time
+time_e &lt;- (time_o + 4*time_m + time_p) / 6
+
+# standard deviation
+sd &lt;- (time_p - time_o) / 6 
+
+# confidence intervals
+ci_68 &lt;- c(&quot;lower&quot; = time_e - sd, &quot;upper&quot; = time_e + sd)
+ci_95 &lt;- c(&quot;lower&quot; = time_e - 2*sd, &quot;upper&quot; = time_e + 2*sd)
+c(&quot;68%&quot; = ci_68, &quot;95%&quot; = ci_95)
+</code></pre>
+
+<pre><code>## 68%.lower 68%.upper 95%.lower 95%.upper 
+##  8.333333 13.333333  5.833333 15.833333
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Task Time Estimation App</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>To simplify task estimates, I developed an app to perform these calculations automatically. The user simply enters values for Most Probable
+Time, Optimistic Time, and Pessimistic Time. The app then calculates Expected
+Time and provides a confidence interval based on the selected interval width
+(68.3% or 95.5%). The calculations are unitless, so time values can represent
+hours, days, or weeks, etc., as long all values are in the same time units.
+This makes time estimation quick and easy for users. Enjoy!<br>
+<img src="assets/img/app.png" alt="Screenshot of Time Estimator."></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Time Estimation in Software Development'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Estimating Time Ranges'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='R Example'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Task Time Estimation App'>
+         4
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+      }
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script> -->
+  <script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
